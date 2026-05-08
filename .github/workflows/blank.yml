@@ -18,7 +18,7 @@ jobs:
           echo "HTML content saved to page_content.html"
           
       - name: Upload HTML file as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4 # <-- نسخه به روز شده به v4
         with:
           name: downloaded-html
           path: page_content.html
