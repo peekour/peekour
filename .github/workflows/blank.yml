@@ -1,27 +1,23 @@
-name: Download YouTube Homepage
+name: Test File Download from GitHub
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # قابلیت اجرا دستی
 
 jobs:
-  download:
-    runs-on: ubuntu-latest
-    env:
-      # این متغیر محیطی به runner میگه که از Node.js 24 استفاده کنه
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  test_download:
+    runs-on: ubuntu-latest # استفاده از آخرین ماشین مجازی اوبونتو
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4 # اینجا هم checkout ممکنه Node.js 20 استفاده کنه، پس بهتره اینم آپدیت بشه
-
-      - name: Fetch YouTube Homepage HTML
+      - name: Create a simple text file
         run: |
-          URL="https://www.youtube.com"
-          curl -o youtube_homepage.html $URL
-          echo "YouTube homepage downloaded to youtube_homepage.html"
+          echo "This is a test file content." > test_file.txt
+          echo "File 'test_file.txt' created."
 
-      - name: Upload HTML file as artifact
-        uses: actions/upload-artifact@v4 # همچنان v4، اما با FORCE_JAVASCRIPT_ACTIONS_TO_NODE24 باید درست کار کنه
+      - name: Upload test file as artifact
+        uses: actions/upload-artifact@v4 # استفاده از نسخه 4 اکشن upload-artifact
         with:
-          name: downloaded-youtube-homepage
-          path: youtube_homepage.html
-          retention-days: 5
+          name: test-artifact # نام artifact
+          path: test_file.txt   # مسیری که فایل ساخته شده
+          retention-days: 1     # فایل برای 1 روز نگهداری میشه
+
+      - name: Confirm artifact upload (optional)
+        run: echo "Artifact 'test-artifact' should now be available in the Actions tab."
