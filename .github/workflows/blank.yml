@@ -1,24 +1,26 @@
-name: Download HTML Content
+name: Download YouTube Homepage
 
 on:
-  workflow_dispatch: # این workflow رو دستی اجرا می‌کنه
+  workflow_dispatch: # این یعنی می‌تونی دستی اجراش کنی
 
 jobs:
   download:
-    runs-on: ubuntu-latest # از یه ماشین اوبونتو استفاده می‌کنیم
+    runs-on: ubuntu-latest # از یک ماشین مجازی اوبونتو استفاده می‌کنه
     steps:
-      - name: Fetch and Save HTML
+      - name: Checkout code # این مرحله کد ریپازیتوری رو در دسترس قرار میده (اگر لازم باشه)
+        uses: actions/checkout@v4 # آخرین نسخه checkout
+
+      - name: Fetch YouTube Homepage HTML
         run: |
-          # URL مورد نظرت رو اینجا بذار
-          URL="https://youtube.com" 
-          
-          # با curl محتوای HTML رو می‌گیریم و تو یه فایل ذخیره می‌کنیم
-          curl -o page_content.html $URL 
-          
-          echo "HTML content saved to page_content.html"
-          
+          URL="https://www.youtube.com" # آدرس یوتیوب
+          # از curl برای دانلود محتوا استفاده می‌کنیم و در فایلی به نام youtube_homepage.html ذخیره می‌کنیم
+          curl -o youtube_homepage.html $URL
+          echo "YouTube homepage downloaded to youtube_homepage.html"
+
       - name: Upload HTML file as artifact
-        uses: actions/upload-artifact@v4 # <-- نسخه به روز شده به v4
+        # از آخرین نسخه stable اکشن upload-artifact استفاده می‌کنیم
+        uses: actions/upload-artifact@v4 # این همان نسخه 4 است که با Node.js 24 سازگار است
         with:
-          name: downloaded-html
-          path: page_content.html
+          name: downloaded-youtube-homepage # نام artifact که در گیت‌هاب نمایش داده میشه
+          path: youtube_homepage.html     # فایلی که در مرحله قبل دانلود شد
+          retention-days: 5             # فایل artifact به مدت 5 روز نگهداری میشه (اختیاری)
