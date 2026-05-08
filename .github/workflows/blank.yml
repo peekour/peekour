@@ -1,26 +1,27 @@
 name: Download YouTube Homepage
 
 on:
-  workflow_dispatch: # این یعنی می‌تونی دستی اجراش کنی
+  workflow_dispatch:
 
 jobs:
   download:
-    runs-on: ubuntu-latest # از یک ماشین مجازی اوبونتو استفاده می‌کنه
+    runs-on: ubuntu-latest
+    env:
+      # این متغیر محیطی به runner میگه که از Node.js 24 استفاده کنه
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
-      - name: Checkout code # این مرحله کد ریپازیتوری رو در دسترس قرار میده (اگر لازم باشه)
-        uses: actions/checkout@v4 # آخرین نسخه checkout
+      - name: Checkout code
+        uses: actions/checkout@v4 # اینجا هم checkout ممکنه Node.js 20 استفاده کنه، پس بهتره اینم آپدیت بشه
 
       - name: Fetch YouTube Homepage HTML
         run: |
-          URL="https://www.youtube.com" # آدرس یوتیوب
-          # از curl برای دانلود محتوا استفاده می‌کنیم و در فایلی به نام youtube_homepage.html ذخیره می‌کنیم
+          URL="https://www.youtube.com"
           curl -o youtube_homepage.html $URL
           echo "YouTube homepage downloaded to youtube_homepage.html"
 
       - name: Upload HTML file as artifact
-        # از آخرین نسخه stable اکشن upload-artifact استفاده می‌کنیم
-        uses: actions/upload-artifact@v4 # این همان نسخه 4 است که با Node.js 24 سازگار است
+        uses: actions/upload-artifact@v4 # همچنان v4، اما با FORCE_JAVASCRIPT_ACTIONS_TO_NODE24 باید درست کار کنه
         with:
-          name: downloaded-youtube-homepage # نام artifact که در گیت‌هاب نمایش داده میشه
-          path: youtube_homepage.html     # فایلی که در مرحله قبل دانلود شد
-          retention-days: 5             # فایل artifact به مدت 5 روز نگهداری میشه (اختیاری)
+          name: downloaded-youtube-homepage
+          path: youtube_homepage.html
+          retention-days: 5
