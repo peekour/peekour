@@ -1,0 +1,24 @@
+name: Download HTML Content
+
+on:
+  workflow_dispatch: # این workflow رو دستی اجرا می‌کنه
+
+jobs:
+  download:
+    runs-on: ubuntu-latest # از یه ماشین اوبونتو استفاده می‌کنیم
+    steps:
+      - name: Fetch and Save HTML
+        run: |
+          # URL مورد نظرت رو اینجا بذار
+          URL="https://youtube.com" 
+          
+          # با curl محتوای HTML رو می‌گیریم و تو یه فایل ذخیره می‌کنیم
+          curl -o page_content.html $URL 
+          
+          echo "HTML content saved to page_content.html"
+          
+      - name: Upload HTML file as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: downloaded-html
+          path: page_content.html
